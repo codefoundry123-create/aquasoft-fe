@@ -1,0 +1,120 @@
+<div class="bg-container">
+  <div class="subscription-container">
+    <span class="close-icon" (click)="close()">
+      <ion-icon name="close-sharp"></ion-icon>
+    </span>
+    <img src="/assets/images/sub-bg.png" alt="" width="183">
+    <div>
+      <p class="title">
+        {{ 'SUBSCRIPTION.UNLOCK_HYDRATION_POWER' | translate }}
+      </p>
+      <p class="desc">
+        {{ 'SUBSCRIPTION.SUBSCRIBE_UNLIMITED_EXPERIENCE' | translate }}
+      </p>
+      <div class="update-now">
+        <img src="/assets/images/feather.svg" alt="">
+        <span>
+          {{ 'SUBSCRIPTION.UPGRADE_NOW' | translate }}
+        </span>
+        <img src="/assets/images/feather.svg" alt="">
+      </div>
+    </div>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th colspan="2"></th>
+            <th>
+              {{ 'SUBSCRIPTION.BASIC' | translate }}
+            </th>
+            <th>
+              {{ 'SUBSCRIPTION.PREMIUM' | translate }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><img src="/assets/images/ad.svg" alt=""></td>
+            <td>
+              {{ 'SUBSCRIPTION.ADS_FREE_EXPERIENCE' | translate }}
+            </td>
+            <td><img src="/assets/images/basic.svg" alt=""></td>
+            <td><img src="/assets/images/premium.svg" alt=""></td>
+          </tr>
+          <tr>
+            <td><img src="/assets/images/water-quality.svg" alt=""></td>
+            <td>
+              {{ 'SUBSCRIPTION.ADVANCED_DAILY_INSIGHTS' | translate }}
+            </td>
+            <td><img src="/assets/images/premium.svg" alt=""></td>
+            <td><img src="/assets/images/premium.svg" alt=""></td>
+          </tr>
+          <tr>
+            <td><img src="/assets/images/reminder.svg" alt=""></td>
+            <td>
+              {{ 'SUBSCRIPTION.CUSTOM_REMINDER' | translate }}
+            </td>
+            <td><img src="/assets/images/premium.svg" alt=""></td>
+            <td><img src="/assets/images/premium.svg" alt=""></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="plans-container">
+      <ion-radio-group  mode="ios" [(ngModel)]="selectedProduct" (ionChange)="selectProduct($event.detail.value)">
+         @for (subscriptionProduct of subscriptionProducts; track subscriptionProduct) {
+           <ion-radio
+            [value]="subscriptionProduct"
+            labelPlacement="end"
+            >
+             <div class="plan">
+                @if (subscriptionProduct.billingPeriod === 'P1W') {
+                  <span>
+                    {{ 'SUBSCRIPTION.WEEKLY' | translate }}
+                  </span>
+                  <span class="trending" >
+                    {{ 'SUBSCRIPTION.TRENDING' | translate }}
+                  </span>
+  
+                }
+                @if (subscriptionProduct.billingPeriod === 'P1M') {
+                  <span>
+                    {{ 'SUBSCRIPTION.MONTHLY' | translate }}
+                  </span>
+                }
+                @if (subscriptionProduct.billingPeriod === 'P1Y') {
+                  <span>
+                    {{ 'SUBSCRIPTION.ANNUALLY' | translate }}
+                  </span>
+                }
+                
+                 @if (activeProductIds.includes(subscriptionProduct.productId)) {
+                  <span class="purchased">
+                    {{ 'SUBSCRIPTION.PURCHASED' | translate }} ✔
+                  </span>
+                }
+               <span class="price"> {{ subscriptionProduct.price }}</span>
+             </div>
+           </ion-radio>
+  
+         }
+      </ion-radio-group>
+    </div>
+  
+    <button class="subscribe-button" (click)="Subscription()"> {{"SUBSCRIPTION.SUBSCRIBE" | translate}}</button>
+    <p class="cancel-note">
+      <span class="cancel-link">
+        {{ 'SUBSCRIPTION.AUTO_RENEWAL_CANCEL_ANYTIME' | translate }}
+        </span>
+    </p>
+  
+    <div class="terms-row">
+      <a (click)="openTermsOfuse()">
+        {{ 'SUBSCRIPTION.GOOGLE_TERMS' | translate }}
+      </a>
+      <div class="divider-line"></div>
+      <a (click)="openPrivacyPolicy()">{{"SUBSCRIPTION.PRIVACY_POLICY" | translate}}</a>
+    </div>
+    <span class="cancel-link" (click)="cancelSubscription()">{{"SUBSCRIPTION.CANCEL_SUBSCRIPTION" | translate}}</span>
+  </div>
+</div>

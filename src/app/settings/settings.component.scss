@@ -1,0 +1,418 @@
+
+.header-title {
+  position: fixed;
+  left: 0;
+  top: 0px;
+  width: 100%;
+  padding: 2rem 1rem 10px;
+  background: #FFF;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-self: center;
+
+  .nav-icon {
+    width: 30px;
+    height: 30px;
+    overflow: hidden;
+    border: 1px solid #CACACA;
+    border-radius: 6px;
+    display: grid;
+    place-items: center;
+    font-size: 24px;
+    position: absolute;
+    left: 25px;
+  }
+
+  h2 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+    font-family: "Poppins";
+    margin: auto
+  }
+}
+
+.ad-height {
+  height: calc(100vh - 0px);
+  overflow-y: auto;
+  padding-bottom: 10px;
+}
+
+.main-wrapper{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.setting-tab-content {
+    font-family: "Poppins";
+    background: #ffffff;
+    width: 100%;
+    padding: 4rem 1rem 30px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto !important;
+    color: #000;
+    flex: 1;
+
+  .profile-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+    margin-block: 0.5rem;
+
+    .avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+
+      img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+      }
+    }
+
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      font-family: "Poppins";
+      margin: 0;
+      color: #000;
+    }
+
+    .edit-icon {
+      margin-left: auto;
+      height: 24px;
+    }
+  }
+
+  .tile-container {
+    border-radius: 10px;
+    box-shadow: 0px 0px 7px 0px #00000029;
+    padding: 12px 12px 0;
+    margin-inline: 5px;
+
+    .item {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      font-size: 16px;
+      height: 35px;
+      border-bottom: 1px solid #EEEEEE;
+      margin-bottom: 12px;
+
+      .toggler {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        span {
+          font-size: 14px;
+          font-weight: 600;
+        }
+      }
+
+      &:last-child {
+        border-bottom: 0;
+        margin-bottom: 0;
+      }
+
+      ion-toggle {
+        --handle-width: 20px;
+        --track-background-checked: #369FFF;
+
+        &::part(track) {
+          height: 24px;
+          width: 44px;
+        }
+      }
+    }
+  }
+
+  .divider-title {
+    margin-block: 1rem;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: "Poppins";
+    color: #9CA4AB;
+  }
+}
+
+.premium-tile {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 10px;
+  background: #ffffff;
+  border-radius: 8px;
+  background-image: url('../../assets/images/pro-tile-bg.png');
+
+  .badge {
+    height: 50px;
+    min-width: 60px;
+  }
+
+  .premium-tile-content {
+    p {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+
+      &.desc {
+        font-size: 8px;
+        line-height: 1.3;
+      }
+    }
+  }
+
+  .upgrade-btn {
+    height: 30px;
+    padding-inline: 10px;
+    border-radius: 20px;
+    color: #369FFF;
+    font-size: 14px;
+    font-weight: 600;
+    border: 0;
+    outline: none;
+    width: 95px;
+  }
+}
+
+//ion modal design
+
+/* DELETE MODAL */
+ion-modal.action-modals {
+  --width: 100%;
+  --height: auto;
+  --max-height: 320px;
+  --border-radius: 10px;
+  --max-width: 340px;
+
+  .content-main {
+    padding: 20px;
+
+    h2 {
+      font-size: 16px;
+      font-weight: 700;
+      margin: 0 auto 5px;
+      text-align: center;
+      font-family: "Poppins";
+    }
+
+    p {
+      font-size: 14px;
+      color: #828587;
+      text-align: center;
+    }
+
+    .stars {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .rating-star {
+      font-size: 28px;
+      color: #f4b400;
+      cursor: pointer;
+    }
+
+    .avatar-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      justify-items: center;
+      margin-bottom: 24px;
+    }
+
+    .avatar-item {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid transparent;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #fafafa;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      &:hover {
+        transform: scale(1.05);
+      }
+
+      &.selected {
+        border-color: #007bff;
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+      }
+    }
+
+    .btn-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: space-around;
+      margin-top: 20px;
+
+      button {
+        height: 42px;
+        padding-inline: 15px;
+        border-radius: 8px;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 500;
+        background: #369FFF;
+        width: 100%;
+        border: 1px solid #369FFF;
+
+        &.cancel-btn {
+          background: transparent;
+          color: #000;
+          border-color: #000;
+        }
+      }
+    }
+  }
+}
+
+
+.ad-container {
+  height: 125px;
+  margin-bottom: 20px;
+  width: 100%;
+
+  //native Skeleton
+  .medium-nat-container {
+    position: absolute;
+    min-width: 300px;
+    width: 95%;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    display: flex;
+    gap: 5px;
+    height: 125px;
+    border: 0;
+    margin: 0 auto;
+    overflow: hidden;
+    z-index: 9;
+    padding: 10px;
+
+    .ad-info-icon {
+      width: 20px;
+      min-height: 20px;
+      background: #ffffff;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-self: center;
+      flex-direction: column;
+      color: var(--btn-color);
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+
+    .ad-text {
+      font-size: 12px;
+      padding: 2px;
+      background: #4982d8;
+      color: #fff;
+      padding-top: 4px;
+      display: inline;
+    }
+
+    .ad-content {
+      display: flex;
+      align-items: center;
+      justify-self: center;
+      flex-direction: column;
+      gap: 10px;
+
+      .img {
+        min-width: 150px;
+        height: 100%;
+        overflow: hidden;
+        max-width: 60px;
+        display: block;
+        border-radius: 8px;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: fill;
+        }
+      }
+
+
+
+      p {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: left;
+      }
+
+      .header {
+        font-size: 16px;
+      }
+
+      .body {
+        font-size: 14px;
+      }
+    }
+
+    .text-main {
+      flex: 1;
+      overflow: hidden;
+
+      ion-skeleton-text {
+        height: 25%;
+      }
+    }
+
+    .ad-btn {
+      outline: none;
+      border-radius: 6px !important;
+      background: var(--btn-color);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      display: block;
+      height: 40px;
+      width: 100%;
+      color: #fff;
+      border: 0;
+    }
+  }
+
+  // Collapisable banner skeleton
+  .skeleton-content-Collapisable {
+    bottom: 5px;
+    display: flex;
+    padding: 1rem;
+    gap: 10px;
+    position: absolute;
+    width: 100%;
+    align-items: center;
+
+    .Collapisable-body {
+      width: 100%;
+    }
+  }
+  &.is-banner{
+    height: 80px !important;
+  }
+
+}

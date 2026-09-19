@@ -1,0 +1,196 @@
+.welcome-screen {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: url('/assets/images/welcome-background.png') no-repeat center center / cover;
+}
+
+.welcome-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  font-family: 'poppins';
+
+  &.is-premium {
+    justify-content: center !important;
+  }
+}
+
+.logo {
+  margin-bottom: 24px;
+
+  video {
+    width: 102px;
+    height: 102px;
+    object-fit: cover;
+    background: transparent;
+    opacity: 0;
+    /* Hide until ready */
+    transition: opacity 0.2s;
+  }
+
+}
+/* When video can play, show it */
+.logo video.ready {
+  opacity: 1;
+}
+.title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #000;
+  margin-bottom: 20px;
+  font-family: 'poppins';
+}
+
+.subtitle {
+  font-size: 17px;
+  color: #000000;
+  margin-bottom: 32px;
+  line-height: 1.4;
+  font-weight: 400;
+  font-family: 'poppins';
+}
+
+.continue-section {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  height: 48px;
+
+  p {
+    font-size: 12px;      
+    color: grey;         
+  }
+
+  ion-progress-bar {
+    width: 80%;
+  }
+}
+
+.get-started-btn {
+  --border-radius: 30px;
+  --background: #369FFF;
+  font-size: 17px;
+  font-weight: 600;
+  height: 45px;
+  width: 90%;
+  margin: 0;
+  --box-shadow: none;
+  overflow: hidden;
+  text-transform: capitalize;
+  font-family: "poppins";
+}
+
+.ads-note {
+  font-size: 12px;
+  color: #000;
+  margin-top: 25px;
+  font-family: 'poppins';
+}
+
+// ad-container
+.ad-container-main {
+  height: 270px;
+  position: relative;
+  width: 100%;
+  padding-inline: 6px;
+  margin-bottom: 35px;
+
+  .skeleton-main {
+    height: 150px;
+    overflow: hidden;
+    background: transparent;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  .ad-container {
+    display: flex;
+    align-items: center;
+    justify-self: center;
+    flex-direction: column;
+    gap: 15px;
+    border-radius: 8px;
+    padding: 12px 15px;
+    height: 270px;
+    position: absolute;
+    top: 6px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    padding-inline: 16px;
+
+
+    .ad-info-icon {
+      width: 20px;
+      min-height: 20px;
+      background: #ffffff;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-self: center;
+      color: var(--btn-color);
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+
+    .banner-img {
+      height: 115px;
+      overflow: hidden;
+      border-radius: 8px;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: fill;
+      }
+    }
+
+    .ad-content {
+      width: 100%;
+      gap: 15px;
+      display: flex;
+      align-items: center;
+      justify-self: center;
+      width: 100%;
+
+      .skeleton-text-wrapper {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-self: center;
+        flex-direction: column;
+
+        ion-skeleton-text {
+          height: 15px !important;
+        }
+      }
+
+      .ad-icon {
+        min-width: 70px;
+        height: 70px;
+        overflow: hidden;
+        max-width: 70px;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: fill;
+        }
+      }
+    }
+
+  }
+}

@@ -1,0 +1,252 @@
+.language-screen {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+
+  .header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px 20px;
+    position: relative;
+
+    .back-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid #ECECEC;
+      display: grid;
+      place-items: center;
+      font-size: 24px;
+      margin-right: auto;
+      position: absolute;
+      left: 20px;
+    }
+
+    .title {
+      font-weight: 600;
+      font-size: 18px;
+      color: #101010;
+      font-family: 'poppins';
+    }
+
+    .action-container {
+      min-width: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      right: 20px;
+
+      .apply-loader {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+
+        ion-spinner {
+          width: 24px;
+          height: 24px;
+          color: #3f51b5;
+        }
+      }
+
+      .apply-btn {
+        width: auto;
+        padding: 9px 14px;
+        border-radius: 25px;
+        background: var(--theme-color);
+        color: #fff;
+        font-size: 14px;
+        font-family: 'poppins';
+        border: 0;
+        outline:none;
+      }
+
+    }
+  }
+
+  .language-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px 15px;
+
+    .language-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 15px;
+      border-radius: 14px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: 0.3s ease;
+      border: 1px solid #D9D9D9;
+      height: 55px;
+      font-family: 'Poppins';
+
+      .left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        .flag {
+          width: 37px;
+          height: 37px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+
+        .lang-name {
+          font-size: 16px;
+          font-weight: 500;
+          color: #000;
+        }
+      }
+
+      .right {
+        .native {
+          font-size: 14px;
+          color: #555;
+        }
+      }
+
+      &.selected {
+        border-color: var(--theme-color);
+      }
+    }
+  }
+
+  .main-ad-container {
+    height: 270px;
+    margin-bottom: 30px;
+  }
+
+}
+
+.ad-loading-container {
+  width: 100%;
+  height: 274px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f2f2f2;
+  color: #555;
+  font-size: 1.2rem;
+  font-weight: bold;
+  position: fixed;
+  bottom: 40px;
+  left: 0;
+  border-top: 2px solid #77c2fc;
+}
+
+.skeleton-main {
+  height: 150px;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+// ad-container
+.ad-container-main {
+  height: 270px;
+  position: relative;
+  width: 100%;
+  padding-inline: 6px;
+  margin-bottom: 35px;
+
+  .skeleton-main {
+    height: 150px;
+    overflow: hidden;
+    background: transparent;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  .ad-container {
+    display: flex;
+    align-items: center;
+    justify-self: center;
+    flex-direction: column;
+    gap: 15px;
+    border-radius: 8px;
+    padding: 12px 15px;
+    height: 270px;
+    position: absolute;
+    top: 6px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    padding-inline: 16px;
+
+
+    .ad-info-icon {
+      width: 20px;
+      min-height: 20px;
+      background: #ffffff;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-self: center;
+      color: var(--btn-color);
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+
+    .banner-img {
+      height: 115px;
+      overflow: hidden;
+      border-radius: 8px;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: fill;
+      }
+    }
+
+    .ad-content {
+      width: 100%;
+      gap: 15px;
+      display: flex;
+      align-items: center;
+      justify-self: center;
+      width: 100%;
+
+      .skeleton-text-wrapper {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-self: center;
+        flex-direction: column;
+
+        ion-skeleton-text {
+          height: 15px !important;
+        }
+      }
+
+      .ad-icon {
+        min-width: 70px;
+        height: 70px;
+        overflow: hidden;
+        max-width: 70px;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: fill;
+        }
+      }
+    }
+
+  }
+}

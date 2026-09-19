@@ -1,0 +1,121 @@
+<div class="tutorial-container">
+  @if (currentSlideIndex() != 0 && currentSlideIndex() != 2) {
+    <span class="back-icon" (click)="prevSlide()">
+      <ion-icon name="chevron-back-sharp"></ion-icon>
+    </span>
+  }
+  <div class="slides-wrapper">
+    <swiper-container #swiperRef (swiperactiveindexchange)="onActiveIndexChange($event)" [pagination]="showPagination"
+    [allowSlideNext]="!showSmallLoader()" [allowSlidePrev]="!showSmallLoader()">
+      <swiper-slide>
+        <div class="slide">
+          <h1>{{"TUTORIAL.SAFE" | translate}} <span class="highlight">{{"TUTORIAL.LIFE" | translate}}</span></h1>
+          <img src="assets/images/slide1.svg" alt="" class="slide-img" />
+          <h2>{{"TUTORIAL.TRACK_YOUR_HYDRATION" | translate}}</h2>
+          <p>{{"TUTORIAL.STAY_ON_TOP_OF_DAILY_WATER_INTAKE" | translate}} </p>
+        </div>
+      </swiper-slide>
+
+      <swiper-slide>
+        <div class="slide">
+          <h1>{{"TUTORIAL.SAFE" | translate}} <span class="highlight">{{"TUTORIAL.SMARTER" | translate}}</span></h1>
+          <img src="assets/images/slide2.svg" alt="" class="slide-img" />
+          <h2>{{"TUTORIAL.PICK_YOUR_CUP" | translate}} </h2>
+          <p>{{"TUTORIAL.CHOOSE_OR_SET_CUP_SIZE" | translate}}</p>
+        </div>
+      </swiper-slide>
+
+      @if (!isPremiumPlan) {
+        <swiper-slide>
+          <p class="slider-loader">
+            @if (showcloaseBtn()) {
+              <ion-icon name="close" class="cross-icon" (click)="closeSlide()"></ion-icon>
+            }
+            <ion-spinner name="circles"></ion-spinner>
+            {{"TUTORIAL.AD_LOADING" | translate}}
+          </p>
+        </swiper-slide>
+      }
+
+      <swiper-slide>
+        <div class="slide">
+          <h1>{{"TUTORIAL.HYDRATION" | translate}}  <span class="highlight">{{"TUTORIAL.GOALS" | translate}}</span></h1>
+          <img src="/assets/images/slide3.svg" alt="" class="slide-img" />
+          <h2>{{"TUTORIAL.SMART_REMINDERS" | translate}} </h2>
+          <p>{{"TUTORIAL.REMINDERS_DESCRIPTION" | translate}}</p>
+        </div>
+      </swiper-slide>
+    </swiper-container>
+  </div>
+
+  <!-- Buttons -->
+  <div class="button-container">
+    @if (currentSlideIndex() < 2) { 
+      <ion-button [disabled]="showSmallLoader()" expand="block" shape="round" (click)="nextSlide()">
+      @if (showSmallLoader() && currentSlideIndex() === 1) {
+      <ion-spinner name="lines-sharp-small"></ion-spinner>
+      }
+      @if (!showSmallLoader()) {
+      {{"TUTORIAL.NEXT" | translate}}
+      }
+      </ion-button>
+      }
+      @if (
+      (!isPremiumPlan && currentSlideIndex() === 3) 
+      ||
+      (isPremiumPlan && currentSlideIndex() === 2)
+      ) {
+      <ion-button expand="block" shape="round" (click)="goToNextScreen()">
+        {{"TUTORIAL.CONTINUE" | translate}}
+      </ion-button>
+      }
+  </div>
+
+
+  <!-- Native ad show -->
+  @if (!(currentSlideIndex() === 2) && !isPremiumPlan) {
+    <div class="ad-container">
+      <!-- skeleton -->
+      @if (nativeAdSkeleton && !isPremiumPlan) {
+        <div class="medium-nat-container">
+          <div class="ad-content">
+            <ion-skeleton-text class="img" [animated]="true"></ion-skeleton-text>
+          </div>
+          <div class="text-main">
+            <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+            <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+            <ion-skeleton-text [animated]="true" style="height:40px"></ion-skeleton-text>
+          </div>
+        </div>
+      }
+
+      <!-- Native ad show container  -->
+      @if (!(currentSlideIndex() === 2)) {
+        <div>
+          @if (!isPremiumPlan) {
+            <div class="medium-nat-container" id="TutorialAdId"></div>
+          }
+        </div>
+      }
+    </div>
+  }
+
+  @if (currentSlideIndex() === 2) {
+    <div>
+      @if (!isPremiumPlan) {
+        <div class="full-native-ad" id="fullTutorialAdId"></div>
+      }
+    </div>
+  }
+</div>
+
+@if (isIntersitialLoading()) {
+<div class="ad-Loading">
+  <!-- loader -->
+  <ion-spinner name="bubbles" duration="5000" class="simple-spinner"></ion-spinner>
+  <!-- text -->
+  <span class="loading-text">
+    {{"TUTORIAL.LOADING_AD" | translate}}
+  </span>
+</div>
+}

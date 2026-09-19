@@ -1,0 +1,150 @@
+// .app-wrapper{
+//     height: calc(100vh - 148px);
+//     overflow: auto;
+// }
+
+.modal-dialog {
+  display: flex;
+  align-items: center;
+  background: #00000075;
+  padding-inline: 50px;
+  height: 100vh;
+  margin: 0;
+
+  .modal-content {
+    border-radius: 1rem !important;
+  }
+}
+
+.modl-main {
+  padding: 20px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  .spinner-main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    flex-direction: column;
+
+    p {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+
+    span {
+      font-size: 16px;
+      text-align: center;
+      line-height: 20px;
+    }
+  }
+}
+
+.spinner-content {
+  position: fixed;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 15px;
+  font-size: 19px;
+  background: #00000082;
+  color: #fff;
+  z-index: 9999;
+}
+
+.app-open-ad {
+  position: fixed;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  background-color: #0b0a0a;
+  color: #c9bfbf;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 20004;
+  text-align: center;
+
+
+  .simple-spinner {
+    margin-top: 40px;
+    width: 50px;
+    height: 50px;
+    color: #0084ff;
+    display: block;
+  }
+}
+
+ion-modal.no-internet-modal {
+  --width: 300px;
+  --height: auto;
+  --border-radius: 15px;
+  --background: transparent;
+  --box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .modal-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .icon-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+
+  .modal-icon {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+  }
+
+  .modal-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #222;
+    margin-block: 5px;
+  }
+
+  .modal-text {
+    font-size: 15px;
+    color: #707070;
+    margin: 0 10px 13px;
+  }
+
+  .modal-actions {
+    width: 100%;
+  }
+
+  .modal-btn.try-btn {
+    width: 77%;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    background: #369FFF;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+  }
+
+}

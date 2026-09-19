@@ -1,0 +1,115 @@
+apply plugin: 'com.android.application'
+apply plugin: "com.google.gms.google-services"
+apply plugin: 'com.google.firebase.crashlytics'
+
+// Fetch the versionName and versionCode from environment.ts
+def envFile = project.hasProperty('SIGNED_STORE_FILE') ? file('../../src/environments/environment.prod.ts') : file('../../src/environments/environment.ts')
+def envText = envFile.text
+def versionNameMatch = envText =~ /versionName\s*:\s*['"]([^'"]+)['"]/
+def versionCodeMatch = envText =~ /versionCode\s*:\s*['"]?(\d+)['"]?/
+def versionNameFromEnv = versionNameMatch ? versionNameMatch[0][1] : "1.0.0"
+def versionCodeFromEnv = versionCodeMatch ? versionCodeMatch[0][1] as Integer : 1
+
+android {
+    // buildToolsVersion '35.0.0'
+    ndkVersion '28.0.13004108'
+  namespace 'com.waterreminderdailyfitness.app'
+    compileSdk rootProject.ext.compileSdkVersion
+    defaultConfig {
+        applicationId "com.waterreminderdailyfitness.app"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode versionCodeFromEnv // @release => Change to a higher number
+        versionName versionNameFromEnv // @release => Change to a higher number
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        aaptOptions {
+             // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
+             // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
+            ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
+        }
+    }
+    signingConfigs {
+        release {
+            if (project.hasProperty('SIGNED_STORE_FILE')) {
+                storeFile file(SIGNED_STORE_FILE)
+                storePassword SIGNED_STORE_PASSWORD
+                keyAlias SIGNED_KEY_ALIAS
+                keyPassword SIGNED_KEY_PASSWORD
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            // @Prod Caution! In production, you need to generate your own keystore file.
+            // see https://reactnative.dev/docs/signed-apk-android.
+            signingConfig signingConfigs.release
+        }
+    }
+}
+
+repositories {
+    flatDir{
+        dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
+    implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
+    implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
+    implementation project(':capacitor-android')
+    testImplementation "junit:junit:$junitVersion"
+    androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
+    implementation project(':capacitor-cordova-android-plugins')
+
+    implementation 'androidx.multidex:multidex:2.0.1'
+      // for ads SDK
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
+      implementation 'com.google.android.gms:play-services-ads:24.8.0'
+
+    // Add for Custom App open Ad show
+    def lifecycle_version = "2.9.0"
+    implementation "androidx.lifecycle:lifecycle-runtime:$lifecycle_version"
+    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-process:$lifecycle_version"
+
+    //for firebase crashlytics
+    implementation 'com.google.firebase:firebase-crashlytics:20.0.3'
+
+  // for fireabse Remote config
+    implementation platform("com.google.firebase:firebase-bom:34.6.0")
+    implementation "com.google.firebase:firebase-config:23.0.1"
+    implementation "com.google.firebase:firebase-analytics:23.0.0"
+
+    implementation 'com.google.android.play:app-update:2.1.0'
+
+    // in-App-Purchase
+    implementation 'com.android.billingclient:billing:8.0.0'
+
+    // for mediation sdk
+    implementation "com.google.ads.mediation:facebook:6.21.0.0" // Meta (Facebook)
+    implementation "com.google.ads.mediation:vungle:7.6.1.0" // Liftoff (Vungle)
+    // implementation "com.google.ads.mediation:applovin:13.5.1.0" // AppLovin
+    // implementation 'com.applovin:applovin-sdk:13.5.1'
+    implementation "com.google.ads.mediation:pangle:7.8.0.8.0" // Pangle
+    implementation "com.google.ads.mediation:unity:4.16.5.0" // Unity
+    // implementation "com.google.ads.mediation:ironsource:9.2.0.0" // IronSource
+}
+
+apply from: 'capacitor.build.gradle'
+
+try {
+    def servicesJSON = file('google-services.json')
+    if (servicesJSON.text) {
+        apply plugin: 'com.google.gms.google-services'
+        apply plugin: 'com.google.firebase.crashlytics'
+    }
+} catch(Exception e) {
+    logger.info("google-services.json not found, google-services plugin not applied. Push Notifications won't work")
+}

@@ -1,0 +1,65 @@
+<div>
+  <div class="container-fluid px-0">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+
+<!-- Update Modal -->
+<!-- <div class="modal fade main-update" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modl-main">
+        <div class="spinner-main">
+          <p>{{"HOME.NEW_VERSION_AVAILABLE" | translate}}</p>
+          <span>{{"HOME.NEW_FEATURES_AVAILABLE" | translate}}</span>
+        </div>
+        <button type="button" class="btn btn-primary" (click)="goToPlayStore()">Update</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<!-- Ad loader  -->
+@if (!isPremiumPlan && loaderState?.show && !isShowInternetModal) {
+<div class="spinner-content">
+  <div class="spinner-border" role="status"></div>
+  <span>{{"APP.AD_BREAK" | translate}}</span>
+</div>
+}
+
+@if (isShowInternetModal) {
+<ion-modal [isOpen]="isShowInternetModal" class="no-internet-modal"
+  [backdropDismiss]="false">
+  <ng-template>
+    <div class="modal-content">
+      <div class="icon-wrapper">
+        <img src="assets/images/no-wifi.svg" alt="No Internet" class="modal-icon" />
+      </div>
+
+      <h2 class="modal-title"> {{"APP.OOOPS" | translate}}</h2>
+      <p class="modal-text">
+         {{"APP.CHECK_INTERNET_CONNECTION" | translate}}
+      </p>
+
+      <div class="modal-actions">
+        <button class="modal-btn try-btn" (click)="retryConnection()">
+          {{"APP.TRY_AGAIN" | translate}}
+        </button>
+      </div>
+    </div>
+  </ng-template>
+</ion-modal>
+}
+
+@if (AppOpenAdCheck && !this.isPremiumPlan) {
+<div class="app-open-ad">
+  <h2> {{"APP.WELCOME_BACK" | translate}} </h2>
+  <span> {{"APP.AD_LOADING_MESSAGE" | translate}}</span>
+
+  <!-- loader -->
+  <!-- <div class="simple-spinner"></div> -->
+  <ion-spinner name="circular" class="simple-spinner"></ion-spinner>
+</div>
+}

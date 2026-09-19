@@ -1,0 +1,117 @@
+<div class="fullscreen-modal">
+  <!-- Header Section -->
+  <div class="modal-header">
+    <h2 class="feature-title">{{ 'EXIT.EXPLORE_FEATURES' | translate }}:</h2>
+    @if (!showFeatureSkeleton) {
+      <span  class="close-button" (click)="close()">
+        <ion-icon name="close-outline"></ion-icon>
+      </span>
+    }
+  </div>
+
+  <!-- Feature Skeleton (shown for 2 seconds) -->
+@if (showFeatureSkeleton) {
+  <div class="feature-grid skeleton-features">
+    <div class="feature-card shimmer-card"></div>
+    <div class="feature-card shimmer-card"></div>
+  </div>
+
+  <div class="feature-card full shimmer-third-card"></div>
+}
+
+@if (!showFeatureSkeleton) {
+  <!-- Features Section -->
+  <div class="feature-grid">
+    <div class="feature-card" (click)="goToReminderPage()">
+      <div class="icon-container">
+         <ion-icon name="notifications-outline"></ion-icon>
+      </div>
+      <h3>
+        {{ 'EXIT.TIMELY_REMINDERS' | translate }}
+      </h3>
+      <p>
+       {{ 'EXIT.TIMELY_REMINDERS_DESCRIPTION' | translate }}
+      </p>
+    </div>
+  
+    <div class="feature-card highlight"  (click)="goToHistoryPage()">
+      <div class="icon-container">
+        <ion-icon name="calendar-clear-outline"></ion-icon>
+      </div>
+      <h3>
+        {{ 'EXIT.TRACK_HYDRATION' | translate }}</h3>
+      <p>{{ 'EXIT.TRACK_HYDRATION_DESCRIPTION' | translate }}</p>
+    </div>
+  </div>
+  
+  <div class="feature-card full custom-third-card" (click)="close()">
+    <div class="left">
+      <img src="assets/images/water.gif" alt="500ml" class="circle-img" />
+      <div class="text-block">
+        <p class="plan-title">
+        {{ 'EXIT.STAY_HYDRATED' | translate }}
+        </p>
+        <p class="plan-desc">
+          {{ 'EXIT.STAY_HYDRATED_DESCRIPTION' | translate }}
+        </p>
+      </div>
+    </div>
+    <img src="assets/images/girl.svg" alt="girl" class="girl-img" />
+  </div>
+}
+
+
+  <!-- Ads Section -->
+    @if (adSkeleton) {
+    <div class="skeleton">
+    <div class="img">
+      <div class="shimmer-box"></div>
+    </div>
+    <div class="text-box">
+      <div class="shimmer-box"></div>
+      <div class="shimmer-box"></div>
+      <div class="shimmer-box" style="height: 40px;"></div>
+    </div>
+  </div>
+    }
+
+    @if (!isPremiumPlan && adSkeleton) {
+  <div class="medium-nat-container" id="ExitAdId"></div>
+    }
+
+  <!-- Divider Line -->
+  <div class="divider"> </div>
+
+  <!-- Exit Section -->
+  <div class="confirm-exit">
+    <img src="assets/images/exit-person.svg" alt="" class="exit-icon" />
+    <h3 class="confirm-heading">{{ 'EXIT.CONFIRM_EXIT' | translate }}</h3>
+    <p class="confirm-text">{{ 'EXIT.EXIT_CONFIRMATION_MESSAGE' | translate }}</p>
+  </div>
+
+  <!-- Exit Button -->
+  <div class="exit-actions">
+    <button
+      class="exit-btn"
+      [disabled]="counter > 0"
+      (click)="exitApp()">
+      <div class="btn-content">
+        <span>
+          @if (counter > 0) {
+          <span>
+            (0{{counter}})
+          </span>
+          }
+          {{ 'EXIT.EXIT' | translate }}</span>
+      </div>
+    </button>
+  </div>
+</div>
+
+<!-- Exit Thank You Screen -->
+@if (ExitScreen) {
+<div class="exit-screen">
+  <img src="assets/images/thank_you.gif" alt="" width="250" />
+  <span>{{ 'EXIT.THANKS_FOR_USING_APP' | translate }}</span>
+</div>
+}

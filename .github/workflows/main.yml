@@ -1,0 +1,120 @@
+name: Android Signed Build
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+permissions:
+  contents: write 
+
+jobs:
+  build:
+    name: Build Signed APK and AAB
+    runs-on: ubuntu-latest
+    environment: production
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'push' && !contains(github.event.head_commit.message, 'ci(version): auto-increment version'))
+
+    env:
+      CI: true
+      APP_NAME: hyderation-reminder
+      AAB_OUTPUT_PATH: android/app/build/outputs/bundle/release/*.aab
+      APK_OUTPUT_PATH: android/app/build/outputs/apk/release/*.apk
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.ACCESS_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Bump patch version and versionCode
+        run: |
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          CURRENT_CODE=$(node -p "require('./package.json').versionCode")
+
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT_VERSION"
+          NEW_VERSION="$MAJOR.$MINOR.$((PATCH + 1))"
+          NEW_CODE=$((CURRENT_CODE + 1))
+
+          echo "Updating version to $NEW_VERSION and versionCode to $NEW_CODE"
+          node -e "let fs=require('fs'), pkg=require('./package.json'); pkg.version='$NEW_VERSION'; pkg.versionCode=$NEW_CODE; fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2));"
+
+          sed -i -e "s%#versionName#%$NEW_VERSION%g" -e "s%#versionCode#%$NEW_CODE%g" src/environments/environment.prod.ts
+
+          echo "VERSION_NAME=$NEW_VERSION" >> $GITHUB_ENV
+          echo "VERSION_CODE=$NEW_CODE" >> $GITHUB_ENV
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.ACCESS_TOKEN }}@github.com/${{ github.repository }}
+          git add package.json package-lock.json
+          git commit -m "ci(version): auto-increment version to $NEW_VERSION [skip ci]"
+          git push
+      
+      - name: Install Dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Build Prod
+        run: |
+          npx rimraf dist .angular
+          npm run build:prod
+          npx cap sync android
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Prepare Keystore
+        run: |
+          echo "${{ secrets.SIGNED_STORE_FILE }}" | base64 --decode > android/app/my-release-key.jks
+          cat <<EOF >> android/gradle.properties
+          SIGNED_STORE_FILE=my-release-key.jks
+          SIGNED_STORE_PASSWORD=${{ secrets.SIGNED_STORE_PASSWORD }}
+          SIGNED_KEY_ALIAS=${{ secrets.SIGNED_KEY_ALIAS }}
+          SIGNED_KEY_PASSWORD=${{ secrets.SIGNED_KEY_PASSWORD }}
+          EOF
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/gradle-wrapper.properties', '**/*.gradle*') }}
+          restore-keys: gradle-${{ runner.os }}-
+
+      - name: Build Signed APK and AAB
+        run: |
+          chmod +x ./gradlew
+          ./gradlew assembleRelease bundleRelease
+        working-directory: android
+
+      - name: Zip Bundle
+        run: |
+          mkdir -p artifacts
+          cp ${{ env.APK_OUTPUT_PATH }} artifacts/${{env.APP_NAME}}-${{ env.VERSION_NAME }}.apk
+          cp ${{ env.AAB_OUTPUT_PATH }} artifacts/${{env.APP_NAME}}-${{ env.VERSION_NAME }}.aab
+          zip -j artifacts/${{env.APP_NAME}}-${{ env.VERSION_NAME }}.zip artifacts/*
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_ACCESS_KEY_SECRET }}
+          aws-region: ${{ vars.AWS_BUCKET_REGION }}
+
+      - name: Upload Zipped Bundle to S3
+        run: aws s3 cp artifacts/${{env.APP_NAME}}-${{ env.VERSION_NAME }}.zip s3://${{ vars.AWS_BUCKET_NAME }}/${{env.APP_NAME}}/${{env.APP_NAME}}-${{ env.VERSION_NAME }}.zip
+
+      - name: Cleanup Keystore
+        if: always()
+        run: rm -f android/app/my-release-key.jks

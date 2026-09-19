@@ -1,0 +1,200 @@
+<div class="main-wrapper">
+<div class="setting-tab-content">
+  <div class="header-title ">
+    <span class="nav-icon" (click)="goToMain()">
+      <ion-icon name="chevron-back-outline"></ion-icon>
+    </span>
+    <h2>{{"SETTING.SETTINGS" | translate}}</h2>
+  </div>
+
+    <div class="premium-tile">
+    <span class="badge">
+      <img src="assets/images/pro-badge.svg" alt="" height="45">
+    </span>
+    <div class="premium-tile-content">
+      <p>{{"SETTING.GET_PREMIUM" | translate}} </p>
+      <p class="desc">{{"SETTING.UPGRADE_NOW" | translate}}</p>
+    </div>
+    <button class="upgrade-btn" (click)="goToSubscription()">{{"SETTING.UPGRADE" | translate}}</button>
+  </div>
+
+  <!-- profile secction -->
+  <div class="profile-wrapper">
+    <span class="avatar">
+      <img [src]="profileIcon 
+                ? profileIcon 
+                : (mainUser()?.gender === 'Male' 
+                    ? 'assets/images/male.svg' 
+                    : 'assets/images/female.svg')" alt="profile icon" />
+    </span>
+    <h3>{{mainUser()?.userName}}</h3>
+    <img src="assets/images/edit-outline.svg" alt="edit" class="edit-icon" (click)="goToEdit('name')">
+  </div>
+
+  <div class="tile-container">
+    <div class="item" (click)="goToEdit('gender')">
+      <span> {{"SETTING.GENDER" | translate}}</span>
+      <div class="toggler"><span>{{mainUser()?.gender}}</span><ion-icon name="chevron-forward-outline"></ion-icon></div>
+    </div>
+    <div class="item" (click)="goToEdit('age')">
+      <span> {{"SETTING.AGE" | translate}}</span>
+      <div class="toggler"><span>{{mainUser()?.userAge}}</span><ion-icon name="chevron-forward-outline"></ion-icon></div>
+    </div>
+    <div class="item" (click)="goToEdit('weight')">
+      <span>{{"SETTING.WEIGHT" | translate}}</span>
+      <div class="toggler"><span>{{mainUser()?.weight}} {{mainUser()?.weightUnit}}</span><ion-icon
+          name="chevron-forward-outline"></ion-icon></div>
+    </div>
+    <div class="item" (click)="goToEdit('height')">
+      <span>{{"SETTING.HEIGHT" | translate}}</span>
+      <div class="toggler"><span>{{mainUser()?.height}} {{mainUser()?.heightUnit}}</span><ion-icon
+          name="chevron-forward-outline"></ion-icon></div>
+    </div>
+  </div>
+
+  <h3 class="divider-title">{{"SETTING.GENERAL" | translate}} </h3>
+
+  <div class="tile-container">
+    <div class="item" (click)="goToEdit('waterGoal')">
+      <span>{{"SETTING.WATER_GOAL" | translate}}</span>
+      <div class="toggler"><span>{{mainUser()?.dailyGoal}} {{mainUser()?.waterUnit}}</span><ion-icon
+          name="chevron-forward-outline"></ion-icon></div>
+    </div>
+    <div class="item" id="open-avatar-modal">
+      <span>{{"SETTING.AVATAR" | translate}}</span>
+      <ion-icon name="chevron-forward-outline"></ion-icon>
+    </div>
+    <div class="item" (click)="goToTutorial()">
+      <span>{{"SETTING.TUTORIAL" | translate}}</span>
+      <ion-icon name="chevron-forward-outline"></ion-icon>
+    </div>
+    <div class="item" (click)="goToLanguage()">
+      <span>{{"SETTING.LANGUAGE" | translate}}</span>
+      <ion-icon name="chevron-forward-outline"></ion-icon>
+
+    </div>
+  </div>
+
+  <h3 class="divider-title">{{"SETTING.OTHER" | translate}}</h3>
+
+  <div class="tile-container">
+    <div class="item" (click)="shareApplication()">
+      <span>{{"SETTING.SHARE_APP" | translate}}</span>
+      <ion-icon name="chevron-forward-outline"></ion-icon>
+    </div>
+    <div class="item" (click)="openRatingModel()">
+      <span>{{"SETTING.RATE_US" | translate}}</span>
+      <ion-icon name="chevron-forward-outline"></ion-icon>
+    </div>
+    <div class="item" (click)="privacyPolicy()">
+      <span>{{"SETTING.PRIVACY_POLICY" | translate}}</span>
+      <ion-icon name="chevron-forward-outline"></ion-icon>
+    </div>
+    <div class="item" id="open-delete-modal">
+      <span>{{"SETTING.DELETE_ACCOUNT" | translate}} </span>
+      <ion-icon name="chevron-forward-outline"></ion-icon>
+    </div>
+    <div class="item">
+      <span>{{"SETTING.APP_VERSION" | translate}}</span>
+      <div class="toggler"><span>{{appVersion}}</span></div>
+    </div>
+  </div>
+
+
+
+</div>
+<!-- Ads -->
+@if (!isPremiumPlan) {
+<div class="ad-container" [ngClass]="isBannerAdActive ? 'is-banner' : ''">
+<!-- skeleton -->
+@if (nativeAdSkeleton()) {
+<div class="medium-nat-container">
+  <div class="ad-content">
+    <ion-skeleton-text class="img" [animated]="true"></ion-skeleton-text>
+  </div>
+  <div class="text-main">
+    <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+    <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+    <ion-skeleton-text [animated]="true" style="height:40px"></ion-skeleton-text>
+  </div>
+</div>
+}
+
+@if(collapsibleAdSkeleton()){
+<div class="skeleton-content-Collapisable">
+  <div class="Collapisable-body">
+    <ion-skeleton-text [animated]="true" style="width: 100%; height: 16px;"></ion-skeleton-text>
+    <ion-skeleton-text [animated]="true" style="width: 100%; height: 16px; "></ion-skeleton-text>
+  </div>
+  <ion-skeleton-text [animated]="true" style="width: 100px; height: 52px; border-radius: 20px;"></ion-skeleton-text>
+</div>
+}
+
+<!-- Native ad show container  -->
+<div>
+  <div class="medium-nat-container" id="SettingsAdId"></div>
+</div>
+</div>
+}
+</div>
+
+<ion-modal #deleteModal trigger="open-delete-modal" class="action-modals" [backdropDismiss]="false">
+  <ng-template>
+    <div class="content-main">
+      <h2>{{"SETTING.ARE_YOU_SURE" | translate}} </h2>
+      <p>{{"SETTING.CONFIRM_DELETE_ACCOUNT" | translate}}</p>
+      <div class="btn-wrapper">
+        <button class="cancel-btn" (click)="deleteModal.dismiss()">{{"SETTING.CANCEL" | translate}} </button>
+        <button (click)="deleteAccount()">{{"SETTING.DELETE_ACCOUNT_BUTTON" | translate}}</button>
+      </div>
+    </div>
+  </ng-template>
+</ion-modal>
+
+<!-- Rating Modal -->
+@if (isRatingModalOpen()) {
+  <ion-modal [isOpen]="isRatingModalOpen()" class="action-modals" [backdropDismiss]="false">
+    <ng-template>
+      <div class="content-main">
+        <h2>{{"SETTING.RATE_US_TITLE" | translate}} </h2>
+        <p>
+          {{"SETTING.RATE_US_DESCRIPTION" | translate}}
+        </p>
+
+        <div class="stars">
+          @for (star of stars; track star; let i = $index) {
+            <ion-icon [name]="i < rating ? 'star' : 'star-outline'"
+              class="rating-star" (click)="setRating(i + 1)">
+            </ion-icon>
+          }
+        </div>
+
+        <div class="btn-wrapper">
+          <button class="cancel-btn" (click)="isRatingModalOpen.set(false)">{{"SETTING.CANCEL" | translate}} </button>
+          <button (click)="submitRating()"> {{"SETTING.SUBMIT" | translate}} </button>
+        </div>
+      </div>
+    </ng-template>
+  </ion-modal>
+}
+
+<!-- Avatar Modal -->
+<ion-modal #avatarModal trigger="open-avatar-modal" class="action-modals" [backdropDismiss]="false">
+  <ng-template>
+    <div class="content-main">
+      <h2>{{"SETTING.CHOOSE_YOUR_AVATAR" | translate}}</h2>
+      <div class="avatar-grid">
+        @for (avatar of avatars; track avatar; let i = $index) {
+          <div class="avatar-item" [class.selected]="selectedAvatar === i"
+            (click)="selectAvatar(i)">
+            <img [src]="avatar" alt="Avatar" />
+          </div>
+        }
+      </div>
+      <div class="btn-wrapper">
+        <button class="cancel-btn" (click)="avatarModal.dismiss()">{{"SETTING.CANCEL" | translate}} </button>
+        <button (click)="confirmAvatarSelection(); avatarModal.dismiss()">{{"SETTING.SELECT" | translate}}</button>
+      </div>
+    </div>
+  </ng-template>
+</ion-modal>

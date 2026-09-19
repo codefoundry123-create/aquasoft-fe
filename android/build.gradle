@@ -1,0 +1,37 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        /** 
+         * Minimum versions of tools for Android API level
+         * @link: https://developer.android.com/studio/releases#android_gradle_plugin_and_android_studio_compatibility
+         */
+        classpath 'com.android.tools.build:gradle:8.7.2' // Required for Hamza's Android studio
+        classpath 'com.google.gms:google-services:4.4.2' // Google services plugin
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.9' // firebase crashlytics
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+apply from: "variables.gradle"
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven {
+      url = uri("https://artifact.bytedance.com/repository/pangle/")
+    }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

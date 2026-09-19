@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Daily Hydration Reminder</string>
+    <string name="title_activity_main">Daily Hydration Reminder</string>
+    <string name="package_name">com.waterreminderdailyfitness.app</string>
+    <string name="custom_url_scheme">com.waterreminderdailyfitness.app</string>
+    <!-- orignal id -->
+    <string name="admob_app_id">ca-app-pub-6753044750035708~6404910600</string> 
+</resources>

@@ -1,0 +1,46 @@
+
+body {
+  margin: 0;
+  height: 100%;
+  font-family: "Poppins";
+  background: #fff !important;
+}
+
+
+:root {
+  --theme-color: #369FFF;
+}
+
+.tabs-inner {
+  flex: unset !important;
+}
+
+ion-toast {
+  top: 25px !important;
+}
+
+.auto-reminder-wrapper {
+  ion-accordion {
+    ion-item {
+      ion-icon {
+        background: #369FFF;
+        border-radius: 50%;
+        margin: 0;
+        font-size: 16px;
+        padding: 4px;
+        color: #fff;
+      }
+    }
+  }
+}
+.setup-complete-modal-wrapper{
+  .ion-page{
+    padding-top: 20px;
+  }
+}
+body:has(history),
+body:has(app-reminder),
+body:has(app-main),
+body:has(app-settings) {
+  background: #fff !important;
+}

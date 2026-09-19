@@ -1,0 +1,158 @@
+<div class="main-wrapper">
+<div class="reminder-tab-content" onselectstart="return false">
+
+  <div class="header-title ">
+    <span class="nav-icon" (click)="backSetting()">
+      <ion-icon name="chevron-back-outline"></ion-icon>
+    </span>
+    <h2>{{"REMINDER.REMINDER" | translate}}</h2>
+  </div>
+  <div>
+
+    <div class="auto-reminder-wrapper">
+      <ion-toggle mode="ios" justify="space-between" [checked]="disableReminders" (ionChange)="disableAllReminders($event)">
+        <h3> {{"REMINDER.ALL_REMINDERS" | translate}}</h3>
+
+        @if (disableReminders) {
+          <span>
+            {{ 'REMINDER.DISABLE' | translate }}
+          </span>
+        } @else {
+          <span>
+            {{ 'REMINDER.ENABLE' | translate }}
+          </span>
+        }
+      </ion-toggle>
+      </div>
+
+    <div class="auto-reminder-wrapper">
+      <ion-accordion-group [value]="['first']" #accordionGroup multiple="true">
+        <ion-accordion value="first">
+          <ion-item slot="header">
+            <h3>{{"REMINDER.CUSTOMIZE_YOUR_REMINDER" | translate}}</h3>
+          </ion-item>
+          <div class="accordian-content" slot="content">
+            <ion-row>
+              <ion-col size="5">
+                <h4>{{"REMINDER.SET_HOUR" | translate}} </h4>
+                <div class="counter-main">
+                  <span class="icon" (click)="changeHour(-1)">
+                    <ion-icon name="chevron-back-sharp"></ion-icon>
+                  </span>
+                  <h4 class="value">{{ format(hour) }}</h4>
+                  <span class="icon" (click)="changeHour(1)">
+                    <ion-icon name="chevron-forward-sharp"></ion-icon>
+                  </span>
+                </div>
+              </ion-col>
+    
+              <ion-col size="5">
+                <h4>{{"REMINDER.SET_MINUTE" | translate}}</h4>
+                <div class="counter-main">
+                  <span class="icon" (click)="changeMinute(-1)">
+                    <ion-icon name="chevron-back-sharp"></ion-icon>
+                  </span>
+                  <h4 class="value">{{ format(minute) }}</h4>
+                  <span class="icon" (click)="changeMinute(1)">
+                    <ion-icon name="chevron-forward-sharp"></ion-icon>
+                  </span>
+                </div>
+              </ion-col>
+    
+              <ion-col size="2">
+                <div class="meridiem-wrapper">
+                  <span [class.active]="period === 'AM'" (click)="setPeriod('AM')">AM</span>
+                  <span [class.active]="period === 'PM'" (click)="setPeriod('PM')">PM</span>
+                </div>
+              </ion-col>
+            </ion-row>
+    
+            <h3 class="repeat">{{"REMINDER.REPEAT" | translate}} </h3>
+    
+            <div class="days-container">
+              <ion-row>
+                @for (day of weekDays; track day) {
+                <ion-col>
+                  <ion-checkbox mode="ios" [checked]="selectedDays.includes(day)"
+                    (ionChange)="toggleDay(day, $event.detail.checked)"></ion-checkbox>
+                  {{day}}
+                </ion-col>
+                }
+              </ion-row>
+            </div>
+            <button class="save-reminder-btn" (click)="saveCustomReminder()">{{"REMINDER.SAVE_REMINDER" |
+              translate}}</button>
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
+    
+      <div class="customized-reminders">
+        @for (time of storedCustomTime(); track time; let i = $index) {
+        <ion-item lines="none" class="custom-reminder-item">
+    
+          <div class="left-content">
+            <ion-icon name="time-outline" class="time-icon"></ion-icon>
+    
+            <div class="time-text">
+              <div class="time">{{ time.hour }}</div>
+              <div class="days" *ngIf="time.days?.length">
+                {{ formatDays(time.days) }}
+              </div>
+            </div>
+          </div>
+    
+          <ion-button fill="clear" class="delete-btn" (click)="deleteTime(i)">
+            <ion-icon name="close-circle-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+        }
+      </div>
+    
+    </div>
+
+    <div class="auto-reminder-wrapper">
+      <h3>{{"REMINDER.SET_DEFAULT_REMINDER" | translate}} </h3>
+      @for (reminder of defaultTime; track reminder; let i = $index) {
+        <ion-toggle mode="ios" justify="space-between"
+          [(ngModel)]="reminder.active" (ionChange)="updateDefaultReminders(i, reminder.active)">
+          <ion-chip>{{reminder.hour}}</ion-chip>
+        </ion-toggle>
+      }
+    </div>     
+  </div>
+</div>
+
+<!-- Ads -->
+@if (!isPremiumPlan) {
+<div class="ad-container" [ngClass]="isBannerAdActive ? 'is-banner' : ''">
+  <!-- skeleton -->
+  @if (nativeAdSkeleton) {
+  <div class="medium-nat-container">
+    <div class="ad-content">
+      <ion-skeleton-text class="img" [animated]="true"></ion-skeleton-text>
+    </div>
+    <div class="text-main">
+      <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+      <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+      <ion-skeleton-text [animated]="true" style="height:40px"></ion-skeleton-text>
+    </div>
+  </div>
+  }
+
+  @if(collapsibleAdSkeleton){
+  <div class="skeleton-content-Collapisable">
+    <div class="Collapisable-body">
+      <ion-skeleton-text [animated]="true" style="width: 100%; height: 16px;"></ion-skeleton-text>
+      <ion-skeleton-text [animated]="true" style="width: 100%; height: 16px; "></ion-skeleton-text>
+    </div>
+    <ion-skeleton-text [animated]="true" style="width: 100px; height: 52px; border-radius: 20px;"></ion-skeleton-text>
+  </div>
+  }
+
+  <!-- Native ad show container  -->
+  <div>
+    <div class="medium-nat-container" id="ReminderAdId"></div>
+  </div>
+</div>
+}
+</div>

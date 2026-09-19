@@ -1,0 +1,278 @@
+<div class="main-wrapper">
+    <div class="container-fluid hydration-home">
+        <!-- Header -->
+        <div class="top-bar d-flex justify-content-between align-items-center" [class.disabled]="isLoader">
+            <h2>{{"MAIN.CURRENT_HYDRATION" | translate}}</h2>
+        
+            <!-- Button wrapper -->
+            <span class="pro-icon" (click)="NavigateWithAd('settings')">
+                <img src="assets/images/Settings.svg" alt="">
+        
+                <!-- Spinner overlay INSIDE the button -->
+                <div class="icon-button-loader" *ngIf="isButtonLoading('settings')">
+                    <ion-spinner name="lines" [style.color]="'var(--text-1000)'"></ion-spinner>
+                </div>
+            </span>
+        </div>
+
+        <!-- Statistics & Reminder -->
+        <div class="d-flex justify-content-between align-items-center quick-actions">
+    
+            <!-- Statistics Button -->
+            <div id="statsBtn" class="action-card" [class.disabled]="isLoader" (click)="NavigateWithAd('history')">
+    
+                <div class="button-content">
+                    <div class="icon-wrapper">
+                        <img src="assets/images/analytics-up.svg" alt="">
+                    </div>
+                    <span class="card-title">
+                        <span>{{ "MAIN.STATISTICS" | translate }}</span>
+                    </span>
+                </div>
+    
+                <!-- Spinner overlay -->
+                <div class="button-loader" *ngIf="isButtonLoading('history')">
+                    <ion-spinner name="lines" [style.color]="'var(--text-1000)'"></ion-spinner>
+                </div>
+            </div>
+    
+            <!-- Reminder Button -->
+            <div id="reminderBtn" class="action-card" [class.disabled]="isLoader" (click)="NavigateWithAd('reminder')">
+    
+                <div class="button-content">
+                    <div class="icon-wrapper">
+                        <img src="assets/images/noti-bell.svg" alt="">
+                    </div>
+    
+                    <span class="card-title">
+                        <span>
+                            <span *ngIf="nextNotificationTime; else setReminder">{{ 'MAIN.NEXT' | translate }}</span>
+                            <ng-template #setReminder>{{ 'MAIN.SET' | translate }}</ng-template>
+                            {{ 'MAIN.REMINDER' | translate }}
+                        </span>
+                    </span>
+    
+                    <span class="card-time">{{ nextNotificationTime }}</span>
+                </div>
+    
+                <!-- Spinner overlay -->
+                <div class="button-loader" *ngIf="isButtonLoading('reminder')">
+                    <ion-spinner name="lines" [style.color]="'var(--text-1000)'"></ion-spinner>
+                </div>
+            </div>
+    
+        </div>
+
+        <!-- Circular Progress -->
+        <div class="progress-wrapper">
+            <div class="hydration-progress">
+                <div class="barOverflow">
+                    <div class="bar"></div>
+                </div>
+            </div>
+
+            <div class="inner-circle">
+                <div class="progress-text">
+                    <!-- Goal Achevied -->
+                    <h3>
+                        {{goalAchieved}}
+                        <span>
+                            {{ 'MAIN.' + (mainUser?.waterUnit ? mainUser?.waterUnit.replace(' ',
+                            '_') : 'ML').toUpperCase() | translate }}
+                        </span>
+                    </h3>
+                    <!-- todayGoal -->
+                    <span>
+                        {{todayGoal ? todayGoal : 3000 }}
+                        {{ 'MAIN.' + (mainUser?.waterUnit ? mainUser?.waterUnit.replace(' ',
+                        '_') : 'ML').toUpperCase() | translate }}
+                    </span>
+                    <p>{{"MAIN.DAILY_DRINK_TARGET" | translate}}</p>
+                </div>
+            </div>
+
+            <!-- Decorative images -->
+            <div class="circle-icon-main">
+                <div id="switchCupBtn" class="circle-icon circle-icon-right" (click)="openSwitchCupModal()">
+                    <img src="assets/images/switch-glass.svg" />
+                </div>
+                <div id="addWaterBtn" class="circle-icon circle-icon-left" (click)="addUserWater(selectedGlass.value)">
+                    <img [src]="selectedGlass.src" />
+                    <span class="add-icon">+</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Add Section -->
+        <div class="quick-add text-center">
+            <h4 class="quick-add-title">{{"MAIN.LETS_GET_HYDRATED" | translate}}</h4>
+            <div class="d-flex justify-content-around">
+                <div class="drink-option" (click)="addUserWater(150)">
+                    <button class="drink-btn small">
+                        <img src="assets/images/glass-150.svg" alt="">
+                    </button>
+                    <span class="drink-label">+ {{waterUnit === 'ml' ? '150 ml':'5 fo oz' }}</span>
+                </div>
+
+                <div class="drink-option" (click)="addUserWater(300)">
+                    <button class="drink-btn medium">
+                        <img src="assets/images/glass-300.svg" alt="">
+                    </button>
+                    <span class="drink-label">+ {{waterUnit === 'ml' ? '300 ml':'10 fo oz' }}</span>
+                </div>
+
+                <div class="drink-option" (click)="addUserWater(400)">
+                    <button class="drink-btn large">
+                        <img src="assets/images/glass-400.svg" alt="">
+                    </button>
+                    <span class="drink-label">+ {{waterUnit === 'ml' ? '400 ml':'13 fo oz' }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Today’s Drinks -->
+        <div class="todays-drink">
+            <!-- Show only if there are records -->
+            @if (todayRecords.length > 0) {
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="fw-bold fs-6">{{"MAIN.TODAYS_HYDRATION" | translate}}</span>
+                </div>
+
+                @for (record of todayRecords; track record) {
+                    <div class="drink-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-start gap-3">
+                                <span class="glass-icon">
+                                    <img [src]="record.src" alt="">
+                                </span>
+                                <div class="ml-2">
+                                    <h5 class="m-0">{{"MAIN.WATER" | translate}}</h5>
+                                    <small>{{ record.time }}</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="drink-ml text-black-50">{{ record.volume }}</span>
+                                <ion-icon name="close-circle-outline" (click)="deleteHydrationHistory(record.waterId)"
+                                    style="font-size: 20px;"></ion-icon>
+                            </div>
+                        </div>
+                    </div>
+                }
+            } @else {
+                <div class="no-drinks-message text-center my-5">
+                   {{"MAIN.NO_DRINKS_ADDED" | translate}}
+                </div>
+            }
+        </div>
+
+    </div>
+    @if (!isPremiumPlan) {
+    <div class="ad-container">
+        <!-- skeleton -->
+        @if (nativeAdSkeleton()) {
+        <div class="medium-nat-container">
+            <div class="ad-content">
+                <ion-skeleton-text class="img" [animated]="true"></ion-skeleton-text>
+            </div>
+            <div class="text-main">
+                <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                <ion-skeleton-text [animated]="true" style="height:40px"></ion-skeleton-text>
+            </div>
+        </div>
+        }
+
+
+        <!-- Native ad show container  -->
+        <div>
+            <div class="medium-nat-container" id="HomeAdId"></div>
+        </div>
+    </div>
+    }
+</div>
+
+
+<!-- Custom Modal -->
+@if (isOpen) {
+    <div class="custom-modal-backdrop">
+        <div class="custom-modal">
+            <div class="modal-header">
+                <span class="modal-title">{{"MAIN.SWITCH_CUP" | translate}}</span>
+                <button type="button" class="btn-close" (click)="closeSwitchCupModal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#000" class="bi bi-x"
+                        viewBox="0 0 16 16">
+                        <path
+                            d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="modal-body dialog-content">
+                <div class="options-container">
+                    <p>{{"MAIN.SELECT_WATER_QT" | translate}}</p>
+                    <div class="options">
+                        @for (item of qtyOptions; track item) {
+                            <button class="btn btn-outline-primary py-2"
+                                [ngClass]="{ 'active': selectedItem === item }" (click)="setQty(item)">
+                                <img [src]="item.src" width="22" height="22" alt="" class="me-3">
+                                <span class="text-dark fw-bold">{{ getDisplayLabel(item.value) }}</span>
+                            </button>
+                        }
+                    </div>
+                </div>
+                <div class="options-container">
+                    <p>{{"MAIN.SET_DRINK_ML" | translate}}</p>
+
+                    <!-- <input type="range" [min]="waterUnit === 'ml' ? 0 : 0" [max]="waterUnit === 'ml' ? 1000 : 33.8"
+                        [step]="waterUnit === 'ml' ? 10 : 0.5" [value]="customQty" (input)="onSliderChange($event)"> -->
+
+                    <!-- Slider -->
+                    <input type="range" min="0" max="1000" step="10" [value]="customQty" (input)="onSliderChange($event)">
+
+                    <!-- Values Row -->
+                    <div class="slider-values">
+                        <span>{{ getDisplayLabel(customQty) }}</span>
+                        <span>{{waterUnit === 'ml' ? 1000 : 33.8}} {{waterUnit}}</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-primary add-drink-btn" (click)="addDrink()">{{"MAIN.ADD_DRINK" | translate}}</button>
+            </div>
+        </div>
+    </div>
+}
+
+@if (isGoalModalOpen) {
+  <div class="custom-modal-backdrop">
+    <div class="custom-modal goal-modal">
+
+      <div class="goal-modal-body text-center">
+        <img src="assets/images/goal-achieved.svg" class="goal-img" />
+
+        <h2 class="goal-title">
+            {{ 'MAIN.CONGRATS' | translate }}
+        </h2>
+
+        <p class="goal-text">
+            {{ 'MAIN.YOU_REACHED_YOUR' | translate }} {{ todayGoal }}
+          {{ waterUnit }} {{ 'MAIN.WATER_GOAL_TODAY' | translate }}
+          <br />
+          {{ 'MAIN.KEEP_HEALTHY_HABITS' | translate }}
+        </p>
+
+        <div class="goal-actions">
+          <button class="btn btn-outline-secondary text-dark" (click)="closeGoalModal()">
+            {{ 'MAIN.CANCEL' | translate }}
+          </button>
+
+          <button class="btn" (click)="shareAchievement()">
+            {{ 'MAIN.SHARE' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

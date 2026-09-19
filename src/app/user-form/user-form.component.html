@@ -1,0 +1,319 @@
+<div class="main-wrapper">
+  <div class="onboarding-container">
+    @if (currentStep>0 && !isEditMode) {
+    <span class="back-icon" (click)="prevStep()">
+      <ion-icon name="chevron-back-outline"></ion-icon>
+    </span>
+    }
+
+    <form #myForm="ngForm">
+      <!-- Slide container -->
+      <div class="slides">
+        <!-- 1️ Name Slide -->
+        @if (currentStep === 0) {
+        <div class="slide">
+          <div class="slide-header">
+            <div class="progress-text"><span>{{ currentStep + 1 }} /</span> 6</div>
+            <h2>{{"USER_FORM.WHAT_IS_YOUR" | translate}} <span>{{"USER_FORM.NAME" | translate}}</span>
+            </h2>
+            <p>{{"USER_FORM.NAME_DESCRIPTION" | translate}}</p>
+          </div>
+          <div class="slide-field-wrapper">
+            <input type="text" placeholder="Shahab Ruth" [(ngModel)]="userData.userName"
+              pattern="^[A-Za-z]+( [A-Za-z]+)*$" name="name" #name="ngModel" required />
+
+            @if (name.invalid && (name.dirty || name.touched)) {
+            <div class="error-msg">
+              {{"USER_FORM.NAME_VALIDATION_CAPITAL_ONLY" | translate}}
+            </div>
+            }
+          </div>
+        </div>
+        }
+
+        <!-- 2️ Age Slide -->
+        @if (currentStep === 1) {
+        <div class="slide">
+          <div class="slide-header">
+            <div class="progress-text"><span>{{ currentStep + 1 }} /</span> 6</div>
+            <h2>{{"USER_FORM.WHAT_IS_YOUR" | translate}} <span>{{"USER_FORM.AGE" | translate}}</span>
+            </h2>
+            <p>{{"USER_FORM.AGE_DESCRIPTION" | translate}}</p>
+          </div>
+          <div class="slide-field-wrapper">
+            <input type="number" placeholder="23" [(ngModel)]="userData.userAge" name="age" pattern="^[0-9]+$"
+              #age="ngModel" required />
+
+            @if (age.invalid && (age.dirty || age.touched)) {
+            <div class="error-msg">
+              {{"USER_FORM.AGE_VALIDATION_NUMBERS_ONLY" | translate}}
+            </div>
+            }
+          </div>
+        </div>
+        }
+
+        <!-- 3 Gender Slide -->
+        @if (currentStep === 2) {
+        <div class="slide">
+          <div class="slide-header">
+            <div class="progress-text"><span>{{ currentStep + 1 }} /</span> 6</div>
+            <h2>{{"USER_FORM.WHAT_IS_YOUR" | translate}} <span>{{"USER_FORM.GENDER" | translate}}</span>
+            </h2>
+            <p>{{"USER_FORM.GENDER_DESCRIPTION" | translate}}</p>
+          </div>
+          <div class="slide-field-wrapper">
+            <div class="gender-options">
+              <div class="option" [class.selected]="userData.gender === 'Male'" (click)="userData.gender = 'Male'">
+                <img src="assets/images/male.svg" alt="Male">
+                <span>{{"USER_FORM.MALE" | translate}}</span>
+              </div>
+              <div class="option" [class.selected]="userData.gender === 'Female'" (click)="userData.gender = 'Female'">
+                <img src="assets/images/female.svg" alt="Female">
+                <span>{{"USER_FORM.FEMALE" | translate}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        }
+
+        <!-- 4 Weight Slide -->
+        @if (currentStep === 3) {
+        <div class="slide">
+          <div class="slide-header">
+            <div class="progress-text"><span>{{ currentStep + 1 }} /</span> 6</div>
+            <h2>{{"USER_FORM.WHAT_IS_YOUR" | translate}} <span>{{"USER_FORM.WEIGHT" | translate}} </span>
+            </h2>
+            <p>{{"USER_FORM.WEIGHT_DESCRIPTION" | translate}}</p>
+          </div>
+
+          <div class="slide-field-wrapper">
+
+            <ion-segment [(ngModel)]="userData.weightUnit" (ionChange)="setWeightUnit()" name="weight">
+              <ion-segment-button value="kg">
+                <ion-label>{{"USER_FORM.KG" | translate}}</ion-label>
+              </ion-segment-button>
+              <ion-segment-button value="lb">
+                <ion-label>{{"USER_FORM.LB" | translate}}</ion-label>
+              </ion-segment-button>
+            </ion-segment>
+
+
+            <div class="scale-container">
+              <!-- Selected weight value (fixed above center line) -->
+              <div class="selected-weight">{{ userData.weight }}</div>
+
+              <!-- Fixed center indicator line -->
+              <div class="center-indicator"></div>
+
+              <!-- Swiper -->
+              <swiper-container #weightSwiper [slidesPerView]="25" [centeredSlides]="true" [spaceBetween]="2"
+                (swiperactiveindexchange)="onWeightSlideChange($event)">
+
+                @for (w of weights; track w) {
+                <swiper-slide>
+                  <div class="tick-wrapper">
+                    @if (w % 5 === 0) {
+                    <div class="label">{{ w }}</div>
+                    }
+                    <div class="tick" [ngClass]="{ 'major': w % 5 === 0 }"></div>
+                  </div>
+                </swiper-slide>
+                }
+              </swiper-container>
+
+              <div class="unit">{{ userData.weightUnit }}</div>
+            </div>
+          </div>
+        </div>
+        }
+
+        <!-- 5 Height Slide -->
+        @if (currentStep === 4) {
+        <div class="slide">
+          <div class="slide-header">
+            <div class="progress-text"><span>{{ currentStep + 1 }} /</span> 6</div>
+            <h2>{{"USER_FORM.HOW" | translate}} <span>{{"USER_FORM.TALL" | translate}} </span>{{"USER_FORM.ARE_YOU" |
+              translate}}
+            </h2>
+            <p>{{"USER_FORM.HEIGHT_DESCRIPTION" | translate}}</p>
+          </div>
+          <div class="slide-field-wrapper">
+
+
+
+            <ion-segment [(ngModel)]="userData.heightUnit" (ionChange)="setHeightUnit()" name="height">
+              <ion-segment-button value="ft">
+                <ion-label>{{"USER_FORM.FT" | translate}}</ion-label>
+              </ion-segment-button>
+              <ion-segment-button value="cm">
+                <ion-label>{{"USER_FORM.CM" | translate}}</ion-label>
+              </ion-segment-button>
+            </ion-segment>
+
+            <div class="scale-container">
+              <div class="selected-weight">{{ userData.height }}</div>
+              <div class="center-indicator"></div>
+
+              <!-- Centimeter Scale -->
+              @if (userData.heightUnit === 'cm') {
+              <swiper-container #heightCmSwiper [slidesPerView]="25" [centeredSlides]="true" [spaceBetween]="2"
+                (swiperactiveindexchange)="onHeightSlideChange($event)">
+                @for (h of heights; track h) {
+                <swiper-slide>
+                  <div class="tick-wrapper">
+                    @if (h % 5 === 0) {
+                    <div class="label">{{ h }}</div>
+                    }
+                    <div class="tick" [ngClass]="{ 'major': h % 5 === 0 }"></div>
+                  </div>
+                </swiper-slide>
+                }
+              </swiper-container>
+              }
+
+              <!-- Feet/Inch Scale -->
+              @if (userData.heightUnit === 'ft') {
+              <swiper-container #heightFtSwiper [slidesPerView]="25" [centeredSlides]="true" [spaceBetween]="2"
+                (swiperactiveindexchange)="onHeightFtSlideChange($event)">
+                @for (h of heightsFt; track h) {
+                <swiper-slide>
+                  <div class="tick-wrapper">
+                    @if (h.inch === 0) {
+                    <div class="label">{{ h.ft }}</div>
+                    }
+                    <div class="tick" [ngClass]="{ 'major': h.inch === 0 }"></div>
+                  </div>
+                </swiper-slide>
+                }
+              </swiper-container>
+              }
+
+              <div class="unit">{{ userData.heightUnit }}</div>
+            </div>
+          </div>
+        </div>
+        }
+
+        <!-- 6 Goal Slide -->
+        @if (currentStep === 5) {
+        <div class="slide">
+            <div class="slide-header">
+              <div class="progress-text"><span>{{ currentStep + 1 }} /</span> 6</div>
+          <h2>{{"USER_FORM.HOW_MUCH_IS_YOUR" | translate}} <span>{{"USER_FORM.GOAL" | translate}} </span>
+          </h2>
+          <p>{{"USER_FORM.GOAL_DESCRIPTION" | translate}}</p>
+          </div>
+           <div class="slide-field-wrapper">
+             <ion-segment [(ngModel)]="userData.waterUnit" name="unit">
+               <ion-segment-button value="ml">
+                 <ion-label>{{"USER_FORM.ML" | translate}}</ion-label>
+               </ion-segment-button>
+               <ion-segment-button value="fl oz">
+                 <ion-label>{{"USER_FORM.FL_OZ" | translate}}</ion-label>
+               </ion-segment-button>
+             </ion-segment>
+   
+             @if (userData.waterUnit === 'ml') {
+             <div class="goal-options">
+               @for (goal of presetMLGoals; track goal) {
+               <ion-button [class.active]="userData.goal === goal" (click)="setGoal(goal)">
+                 {{ goal }} {{"USER_FORM.ML" | translate}}
+               </ion-button>
+               }
+             </div>
+             }
+   
+             @if (userData.waterUnit === 'fl oz') {
+             <div class="goal-options">
+               @for (goal of presetOZGoals; track goal) {
+               <ion-button [class.active]="userData.goal === goal" (click)="setGoal(goal)">
+                 {{ goal }} {{"USER_FORM.FL_OZ" | translate}}
+               </ion-button>
+               }
+             </div>
+             }
+   
+             <div class="goal-field-wrapper">
+               <input #dailyGoalInput type="number" [(ngModel)]="userData.dailyGoal" placeholder="Custom" name="Goal"
+                 #Goal="ngModel" required pattern="^[0-9]+$" />
+               <img src="assets/images/edit-outline.svg" (click)="focusDailyGoalInput()" alt="edit" class="edit-icon">
+             </div>
+   
+             @if (Goal.invalid && (Goal.dirty || Goal.touched)) {
+             <div class="error-msg">
+               {{"USER_FORM.WATER_GOAL_VALIDATION_NUMBERS_ONLY" | translate}}
+             </div>
+             }
+           </div>
+        </div>
+        }
+      </div>
+
+      <!-- Next Button -->
+      <div class="next-btn-wrapper" [style.--percent]="progress">
+        @if (!isEditMode) {
+        <div class="progress-circle">
+          <span></span>
+        </div>
+        }
+        @if (!isEditMode) {
+        <button class="next-btn" [disabled]="!isCurrentStepValid()" (click)="nextStep()" aria-label="Next">
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </button>
+        }
+
+        @if (isEditMode) {
+        <button class="save-btn" [disabled]="!isCurrentStepValid()" (click)="saveChanges()">{{"USER_FORM.SAVE" |
+          translate}}</button>
+        }
+      </div>
+    </form>
+
+
+  </div>
+  <!-- Ads -->
+  @if (!isPremiumPlan) {
+  <div class="ad-container">
+    <!-- skeleton -->
+    @if (nativeAdSkeleton()) {
+    <div class="medium-nat-container">
+      <div class="ad-content">
+        <ion-skeleton-text class="img" [animated]="true"></ion-skeleton-text>
+      </div>
+      <div class="text-main">
+        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+        <ion-skeleton-text [animated]="true" style="height:40px"></ion-skeleton-text>
+      </div>
+    </div>
+    }
+
+    <!-- Native ad show container  -->
+    <div>
+      <div class="medium-nat-container" id="FormAdId"></div>
+    </div>
+  </div>
+  }
+</div>
+
+<!-- existing onboarding code -->
+@if (showSetupModal) {
+<ion-modal [isOpen]="showSetupModal" [canDismiss]="false" class="setup-complete-modal-wrapper">
+  <ng-template>
+    <div class="modal-card">
+
+      <!-- Foreground content -->
+      <div class="content">
+        <img src="assets/images/water-bottle.svg" alt="Bottle" class="bottle-img" />
+
+        <h2>{{"USER_FORM.SETUP_COMPLETE" | translate}} </h2>
+        <p>{{"USER_FORM.SETUP_COMPLETE_DESCRIPTION" | translate}}</p>
+
+        <ion-button expand="block" shape="round" (click)="goToNextPage()">{{"USER_FORM.CONTINUE" |
+          translate}}</ion-button>
+      </div>
+    </div>
+  </ng-template>
+</ion-modal>
+}

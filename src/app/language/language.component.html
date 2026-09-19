@@ -1,0 +1,67 @@
+<div class="language-screen">
+    <!-- Header -->
+    <div class="header">
+        @if (source === 'settings') {
+        <span class="back-icon" (click)="continue()">
+            <ion-icon name="chevron-back-sharp"></ion-icon>
+        </span>
+        }
+        <span class="title">{{"LANGUAGE.LANGUAGES" | translate}}</span>
+
+        <div class="action-container">
+            <!-- Loader -->
+            @if (showSmallLoader) {
+            <span class="apply-loader">
+                <ion-spinner name="circular"></ion-spinner>
+            </span>
+            }
+
+            <!-- Apply Button -->
+            @if (selectedLanguage && !showSmallLoader) {
+            <button class="apply-btn" [disabled]="!selectedLanguage"
+                (click)="apply()">
+                {{"LANGUAGE.APPLY" | translate}}
+            </button>
+            }
+        </div>
+    </div>
+
+    <!-- Language List -->
+    <div class="language-list">
+        @for (lang of results; track lang) {
+        <div class="language-item" [class.selected]="selectedLanguage?.code === lang.code"
+            (click)="onSelected(lang)">
+            <div class="left">
+                <img class="flag" [src]="'assets/flag/' + lang.country + '.svg'" alt="flag" />
+                <span class="lang-name">{{ lang.name.split('-')[0] }}</span>
+            </div>
+            <div class="right">
+                <span class="native">({{ lang.name.split('-')[1] }})</span>
+            </div>
+        </div>
+        }
+    </div>
+
+    @if (!isPremiumPlan) {
+    <div class="ad-container-main">
+        <!-- skeleton -->
+        @if (adSkeleton) {
+        <div class="ad-container skeleton-main ">
+            <ion-skeleton-text [animated]="true" class="banner-img"></ion-skeleton-text>
+            <div class="ad-content">
+                <ion-skeleton-text [animated]="true" class="ad-icon"></ion-skeleton-text>
+                <span class="skeleton-text-wrapper">
+                    <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                    <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                    <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+                </span>
+            </div>
+            <ion-skeleton-text [animated]="true" style="height: 60px;"></ion-skeleton-text>
+        </div>
+        }
+
+        <!-- Native ad show container  -->
+        <div class="ad-container ad-div" id="LanguageAdId"> </div>
+    </div>
+    }
+</div>

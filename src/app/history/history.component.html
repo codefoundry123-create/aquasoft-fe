@@ -1,0 +1,160 @@
+<div class="history-tab-content container-fluid premium-container">
+  <div class="header-title ">
+    <span class="nav-icon" (click)="goToMain()">
+      <ion-icon name="chevron-back-outline"></ion-icon>
+    </span>
+    <h2>{{"HISTORY.STATISTICS" | translate}}</h2>
+  </div>
+  <div class="tab-container">
+    <div class="high-chart" onselectstart="return false">
+      @if (chartOptions && chartOptions.series && chartOptions.series.length) {
+      <highcharts-chart [Highcharts]="Highcharts" [options]="chartOptions">
+      </highcharts-chart>
+      }
+    </div>
+    <ion-tabs class="position-static">
+      @if (selectedTab === 'Weekly') {
+      <div class="tab-content-main">
+        <div class="grapgh-skeleton"></div>
+        <div class="completing-wrapper">
+          <h3>{{"HISTORY.WEEKLY_COMPLETION" | translate}}</h3>
+          <div class="duration-container">
+            @for (day of weekDays; track day) {
+            <div class="pill" [class.active]="selectedDay === day">
+              <span>{{ weeklyValues[day] || 0 }} ml</span>
+              <span class="duration">{{ day }}</span>
+            </div>
+            }
+          </div>
+          <h3>{{"HISTORY.DRINK_HYDRATION_REPORT" | translate}}</h3>
+          <div class="report-wrapper">
+            <div class="report-item">
+              <span class="report-title">{{"HISTORY.WEEKLY_AVERAGE" | translate}} </span>
+              <span class="report-value">{{weeklyAverage}} / Day</span>
+            </div>
+            <div class="report-item">
+              <span class="report-title">{{"HISTORY.MONTHLY_AVERAGE" | translate}} </span>
+              <span class="report-value">{{monthlyAverage}} / Day</span>
+            </div>
+            <div class="report-item">
+              <span class="report-title">{{"HISTORY.YEARLY_AVERAGE" | translate}} </span>
+              <span class="report-value">{{yearlyAverage}} / Day</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      }
+      @if (selectedTab === 'Monthly') {
+      <div class="tab-content-main">
+        <div class="grapgh-skeleton"></div>
+        <div class="completing-wrapper">
+          <h3>{{"HISTORY.MONTHLY_COMPLETION" | translate}}</h3>
+          <div class="duration-container">
+            @for (w of weeks; track w) {
+            <div class="pill" [class.active]="selectedDay === w.label">
+              <span>{{ monthlyValues[w.label] || 0 }} ml</span>
+              <span class="week">{{ w.label }}</span>
+              <span class="duration">{{ w.range }}</span>
+            </div>
+            }
+          </div>
+
+
+          <h3>{{"HISTORY.DRINK_HYDRATION_REPORT" | translate}}</h3>
+          <div class="report-wrapper">
+            <div class="report-item">
+              <span class="report-title">{{"HISTORY.WEEKLY_AVERAGE" | translate}} </span>
+              <span class="report-value">{{weeklyAverage}} / Day</span>
+            </div>
+            <div class="report-item">
+              <span class="report-title">{{"HISTORY.MONTHLY_AVERAGE" | translate}} </span>
+              <span class="report-value">{{monthlyAverage}} / Day</span>
+            </div>
+            <div class="report-item">
+              <span class="report-title">{{"HISTORY.YEARLY_AVERAGE" | translate}} </span>
+              <span class="report-value">{{yearlyAverage}}/ Day</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      }
+      @if (selectedTab === 'Yearly') {
+      <div class="tab-content-main">
+        <div class="grapgh-skeleton"></div>
+        <div class="completing-wrapper">
+          <h3>{{"HISTORY.YEARLY_COMPLETION" | translate}}</h3>
+          <div class="duration-container">
+            @for (month of months; track month) {
+            <div class="pill" [class.active]="selectedDay === month">
+              <span>{{ yearlyValues[month] || 0 }} ml</span>
+              <span class="duration">{{ month }}</span>
+            </div>
+            }
+          </div>
+
+          <h3>{{"HISTORY.DRINK_HYDRATION_REPORT" | translate}}</h3>
+          <div class="report-wrapper">
+            <div class="report-item">
+              <span class="report-title">{{"HISTORY.WEEKLY_AVERAGE" | translate}} </span>
+              <span class="report-value">{{weeklyAverage}} / Day</span>
+            </div>
+            <div class="report-item">
+              <span class="report-title">{{"HISTORY.MONTHLY_AVERAGE" | translate}}</span>
+              <span class="report-value">{{monthlyAverage}} / Day</span>
+            </div>
+            <div class="report-item">
+              <span class="report-title">{{"HISTORY.YEARLY_AVERAGE" | translate}} </span>
+              <span class="report-value">{{yearlyAverage}}/ Day</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      }
+
+      <ion-tab-bar slot="top">
+        <ion-tab-button (click)="selectTab('Weekly')" [class.selected]="selectedTab === 'Weekly'">
+          <ion-label>{{"HISTORY.WEEKLY" | translate}} </ion-label>
+        </ion-tab-button>
+        <ion-tab-button (click)="selectTab('Monthly')" [class.selected]="selectedTab === 'Monthly'">
+          <ion-label>{{"HISTORY.MONTHLY" | translate}} </ion-label>
+        </ion-tab-button>
+        <ion-tab-button (click)="selectTab('Yearly')" [class.selected]="selectedTab === 'Yearly'">
+          <ion-label>{{"HISTORY.YEARLY" | translate}} </ion-label>
+        </ion-tab-button>
+      </ion-tab-bar>
+    </ion-tabs>
+  </div>
+  <!-- Ads -->
+  @if (!isPremiumPlan) {
+  <div class="ad-container">
+    <!-- skeleton -->
+    @if (nativeAdSkeleton()) {
+    <div class="medium-nat-container">
+      <div class="ad-content">
+        <ion-skeleton-text class="img" [animated]="true"></ion-skeleton-text>
+      </div>
+      <div class="text-main">
+        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+        <ion-skeleton-text [animated]="true" style="height:40px"></ion-skeleton-text>
+      </div>
+    </div>
+    }
+  
+    @if(collapsibleAdSkeleton()){
+    <div class="skeleton-content-Collapisable">
+      <div class="Collapisable-body">
+        <ion-skeleton-text [animated]="true" style="width: 100%; height: 16px;"></ion-skeleton-text>
+        <ion-skeleton-text [animated]="true" style="width: 100%; height: 16px; "></ion-skeleton-text>
+      </div>
+      <ion-skeleton-text [animated]="true" style="width: 100px; height: 52px; border-radius: 20px;"></ion-skeleton-text>
+    </div>
+    }
+  
+    <!-- Native ad show container  -->
+    <div>
+      <div class="medium-nat-container" id="HistoryAdId"></div>
+    </div>
+  </div>
+  }
+</div>
